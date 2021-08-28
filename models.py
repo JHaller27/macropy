@@ -45,7 +45,8 @@ class LoopEvent(BaseModel):
         while i is None or i > 0:
             for item in self.value:
                 item.execute()
-            i -= 1
+            if i is not None:
+                i -= 1
         secho("End loop", fg=colors.BRIGHT_BLACK)
 
 
