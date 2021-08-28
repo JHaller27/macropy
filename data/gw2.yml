@@ -4,7 +4,6 @@
       value: 3
 
     - type: 'loop'
-      times: 3
       value:
       - type: 'key'
         value: '9'

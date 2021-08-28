@@ -16,7 +16,7 @@ class EventType(str, Enum):
 
 class DelayEvent(BaseModel):
     type: Literal[EventType.DELAY]
-    value: int
+    value: float
 
     def execute(self) -> None:
         secho(f"Delay for {self.value} sec... ", nl=False, fg=colors.BRIGHT_BLACK)
@@ -40,14 +40,27 @@ class LoopEvent(BaseModel):
     times: Optional[int]
 
     def execute(self) -> None:
+        if self.times is None:
+            self._execute_infinitely()
+        else:
+            self._execute_times()
+
+    def _execute_times(self) -> None:
+        assert self.times is not None
+
         secho(f"Looping {self.times} times... ", fg=colors.BRIGHT_BLACK)
-        i = self.times
-        while i is None or i > 0:
+        for _ in range(self.times):
             for item in self.value:
                 item.execute()
-            if i is not None:
-                i -= 1
         secho("End loop", fg=colors.BRIGHT_BLACK)
+
+    def _execute_infinitely(self) -> None:
+        assert self.times is None
+
+        secho(f"Looping infinitely... ", fg=colors.BRIGHT_BLACK)
+        while True:
+            for item in self.value:
+                item.execute()
 
 
 class Config(BaseModel):
