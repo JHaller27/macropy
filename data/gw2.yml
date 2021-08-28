@@ -1,0 +1,13 @@
+- name: Spam Mephit
+  sequence:
+    - type: 'delay'
+      value: 3
+
+    - type: 'loop'
+      times: 3
+      value:
+      - type: 'key'
+        value: '9'
+
+      - type: 'delay'
+        value: 5
