@@ -15,7 +15,7 @@ def main(path: Path) -> None:
     threads = []
     for item in config_lst:
         config: Config = Config.parse_obj(item)
-        thread = threading.Thread(target=config.execute)
+        thread = threading.Thread(target=config.execute_config)
         threads.append(thread)
 
     for thread in threads:
