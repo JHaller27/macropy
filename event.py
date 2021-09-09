@@ -1,6 +1,8 @@
 from time import sleep
 import keyboard
 
+from typer import secho
+
 
 class IEvent:
     def execute(self):
@@ -19,6 +21,7 @@ class DelayEvent(IEvent):
 
     def execute(self):
         # TODO: Replace with Clock thread wait/notify
+        secho(f"Delay for {self.duration}s")
         sleep(self.duration)
 
 
@@ -33,4 +36,5 @@ class KeyPressEvent(IEvent):
         return self._key
 
     def execute(self):
+        secho(f"Press & release {self.key}")
         keyboard.press_and_release(self.key)
