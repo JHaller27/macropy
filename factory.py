@@ -1,17 +1,19 @@
-from models import *
+from typing import Iterator
 
 from pathlib import Path
 import yaml
 
 from event import *
+from models import *
 from macro import Macro
 
 
-def parse_yaml(path: Path) -> MacroModel:
+def _parse_yaml(path: Path) -> Iterator[MacroModel]:
     with path.open(mode='r') as fp:
         data = yaml.safe_load(fp)
 
-    return MacroModel.parse_obj(data)
+    for item in data:
+        yield MacroModel.parse_obj(item)
 
 
 def _parse_event(ev_model: EventModel) -> IEvent:
@@ -23,7 +25,7 @@ def _parse_event(ev_model: EventModel) -> IEvent:
     raise ValueError(f"Invalid event type '{ev_model.type}'")
 
 
-def build_macro(model: MacroModel) -> Macro:
+def _model2macro(model: MacroModel) -> Macro:
     macro = Macro()
 
     for ev_model in model.run_once:
@@ -35,3 +37,8 @@ def build_macro(model: MacroModel) -> Macro:
         macro.add_looped(event)
 
     return macro
+
+
+def build_macros(path: Path) -> Iterator[Macro]:
+    for model in _parse_yaml(path):
+        yield _model2macro(model)
