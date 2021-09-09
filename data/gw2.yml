@@ -1,5 +1,5 @@
 - name: Spam Mephit
-  run once:
+  run_once:
     - type: 'delay'
       value: 3
   loop:
