@@ -8,6 +8,7 @@ class Macro:
 
     def __init__(self):
         self._run_once = []
+        self._looped = []
 
     def run(self):
         for event in self._run_once:

@@ -7,7 +7,7 @@ class IEvent:
         raise NotImplementedError
 
 
-class Delay(IEvent):
+class DelayEvent(IEvent):
     _duration: float
 
     def __init__(self, duration: float):
@@ -22,7 +22,7 @@ class Delay(IEvent):
         sleep(self.duration)
 
 
-class KeyPress(IEvent):
+class KeyPressEvent(IEvent):
     _key: str
 
     def __init__(self, key: str):
