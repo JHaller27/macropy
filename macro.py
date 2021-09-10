@@ -3,12 +3,18 @@ from event import IEvent
 
 
 class Macro:
+    _name: str
     _run_once: list[IEvent]
     _looped: list[IEvent]
 
-    def __init__(self):
+    def __init__(self, name: str):
+        self._name = name
         self._run_once = []
         self._looped = []
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     def run(self):
         for event in self._run_once:
