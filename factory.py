@@ -9,8 +9,6 @@ from macro import Macro
 
 
 def _parse_yaml(path: Path) -> Iterator[MacroModel]:
-    Clock.init(1.0)
-
     with path.open(mode='r') as fp:
         data = yaml.safe_load(fp)
 
