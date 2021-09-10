@@ -15,7 +15,7 @@ def main(path: Path):
         threads.append(t)
 
     for t in threads:
-        t.run()
+        t.start()
     for t in threads:
         t.join()
 
