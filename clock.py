@@ -34,7 +34,5 @@ class Clock:
 
         while True:
             sleep(self._latency)
-            print("Tick")
-
             with self._lock:
                 self._lock.notify_all()
