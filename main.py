@@ -3,13 +3,14 @@ from pathlib import Path
 
 import factory
 
+from clock import Clock
 import threading
 
 
 def main(path: Path):
     macros = factory.build_macros(path)
 
-    threads = []
+    threads = [threading.Thread(target=Clock.instance().run)]
     for macro in macros:
         t = threading.Thread(target=macro.run)
         threads.append(t)

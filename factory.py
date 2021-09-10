@@ -9,6 +9,8 @@ from macro import Macro
 
 
 def _parse_yaml(path: Path) -> Iterator[MacroModel]:
+    Clock.init(1.0)
+
     with path.open(mode='r') as fp:
         data = yaml.safe_load(fp)
 
@@ -18,7 +20,14 @@ def _parse_yaml(path: Path) -> Iterator[MacroModel]:
 
 def _parse_event(ev_model: EventModel) -> IEvent:
     if ev_model.type == EventType.DELAY:
-        return DelayEvent(float(ev_model.value))
+        time_delay = float(ev_model.value)
+        tick_delay = Clock.instance().seconds_to_ticks(time_delay)
+
+        if tick_delay <= 0:
+            raise ValueError(f"Cannot set delay of {time_delay}s - produces tick delay of 0")
+
+        return DelayEvent(tick_delay)
+
     if ev_model.type == EventType.KEY:
         return KeyPressEvent(str(ev_model.value))
 

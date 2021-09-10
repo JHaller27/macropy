@@ -1,4 +1,4 @@
-from time import sleep
+from clock import Clock
 import keyboard
 
 from typer import secho
@@ -10,19 +10,20 @@ class IEvent:
 
 
 class DelayEvent(IEvent):
-    _duration: float
+    _duration: int  # Ie target tick count
 
-    def __init__(self, duration: float):
+    def __init__(self, duration: int):
         self._duration = duration
 
     @property
-    def duration(self) -> float:
+    def duration(self) -> int:
         return self._duration
 
     def execute(self):
-        # TODO: Replace with Clock thread wait/notify
-        secho(f"Delay for {self.duration}s")
-        sleep(self.duration)
+        secho(f"Delay for {self.duration} ticks")
+        with Clock.instance().lock:
+            for _ in range(self._duration):
+                Clock.instance().lock.wait()
 
 
 class KeyPressEvent(IEvent):
