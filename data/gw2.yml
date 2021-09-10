@@ -1,21 +1,19 @@
 - name: Spam Mephit
   run_once:
-    - type: 'delay'
+    - type: delay
       value: 3
   loop:
-    - type: 'key'
-      value: '9'
-
-    - type: 'delay'
+    - type: key
+      value: 9
+    - type: delay
       value: 5
 
 - name: Spam Attack
   run_once:
-    - type: 'delay'
+    - type: delay
       value: 3
   loop:
-    - type: 'key'
-      value: '1'
-
-    - type: 'delay'
+    - type: key
+      value: 1
+    - type: delay
       value: 1
