@@ -3,13 +3,21 @@ from pathlib import Path
 
 import factory
 
+import threading
+
 
 def main(path: Path):
     macros = factory.build_macros(path)
 
-    # TODO: Run each macro in own thread
+    threads = []
     for macro in macros:
-        macro.run()
+        t = threading.Thread(target=macro.run)
+        threads.append(t)
+
+    for t in threads:
+        t.run()
+    for t in threads:
+        t.join()
 
 
 if __name__ == "__main__":

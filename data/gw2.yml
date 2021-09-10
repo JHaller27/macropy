@@ -8,3 +8,14 @@
 
     - type: 'delay'
       value: 5
+
+- name: Spam Attack
+  run_once:
+    - type: 'delay'
+      value: 3
+  loop:
+    - type: 'key'
+      value: '1'
+
+    - type: 'delay'
+      value: 0.5

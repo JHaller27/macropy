@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from enum import Enum
 from pydantic import BaseModel
 
@@ -15,5 +15,5 @@ class EventModel(BaseModel):
 
 class MacroModel(BaseModel):
     name: str
-    run_once: list[EventModel]
-    loop: list[EventModel]
+    run_once: Optional[list[EventModel]]
+    loop: Optional[list[EventModel]]
