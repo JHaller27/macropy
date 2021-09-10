@@ -8,7 +8,7 @@ import threading
 
 
 def main(path: Path):
-    Clock.init(1.0)
+    Clock.init(0.25)
 
     macros = factory.build_macros(path)
 
