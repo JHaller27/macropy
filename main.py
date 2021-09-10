@@ -12,15 +12,23 @@ def main(path: Path):
 
     macros = factory.build_macros(path)
 
-    threads = [threading.Thread(target=Clock.instance().run)]
+    # Set up threads
+    clock_thread = threading.Thread(target=Clock.instance().run)
+    threads = []
     for macro in macros:
         t = threading.Thread(target=macro.run)
         threads.append(t)
 
+    # Start threads
+    clock_thread.start()
     for t in threads:
         t.start()
+
+    # Wait for threads to be done
     for t in threads:
         t.join()
+    Clock.instance().stop()
+    clock_thread.join()
 
 
 if __name__ == "__main__":

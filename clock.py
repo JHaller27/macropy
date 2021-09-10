@@ -6,6 +6,7 @@ class Clock:
     _latency: float
     _lock: Condition
     _instance: 'Clock' = None
+    _loop: bool
 
     def __init__(self, latency: float):
         self._latency = latency
@@ -32,7 +33,11 @@ class Clock:
         with self._lock:
             self._lock.notify_all()
 
-        while True:
+        self._loop = True
+        while self._loop:
             sleep(self._latency)
             with self._lock:
                 self._lock.notify_all()
+
+    def stop(self) -> None:
+        self._loop = False
