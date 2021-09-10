@@ -15,5 +15,6 @@ class EventModel(BaseModel):
 
 class MacroModel(BaseModel):
     name: str
+    kill: Optional[str]
     run_once: Optional[list[EventModel]]
     loop: Optional[list[EventModel]]

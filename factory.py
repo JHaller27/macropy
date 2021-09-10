@@ -33,7 +33,7 @@ def _parse_event(ev_model: EventModel) -> IEvent:
 
 
 def _model2macro(model: MacroModel) -> Macro:
-    macro = Macro(model.name)
+    macro = Macro(name=model.name, kill_hotkey=model.kill)
 
     if model.run_once is not None:
         for ev_model in model.run_once:

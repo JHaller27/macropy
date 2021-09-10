@@ -10,11 +10,13 @@ class Macro:
     _looped: list[IEvent]
     _continue_loop: bool
 
-    def __init__(self, name: str, kill_hotkey: str = 'esc'):
+    def __init__(self, name: str, kill_hotkey: str = None):
         self._name = name
         self._run_once = []
         self._looped = []
 
+        if kill_hotkey is None:
+            kill_hotkey = 'esc'
         keyboard.add_hotkey(kill_hotkey, self._kill)
 
     def _kill(self) -> None:
