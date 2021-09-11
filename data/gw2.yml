@@ -6,14 +6,14 @@
     - type: key
       value: 9
     - type: delay
-      value: 5
+      value: 43
 
-- name: Spam Attack
+- name: Spam Elemental
   run_once:
     - type: delay
       value: 3
   loop:
     - type: key
-      value: 1
+      value: 0
     - type: delay
-      value: 1
+      value: 123
