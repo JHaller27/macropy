@@ -1,28 +1,35 @@
-import threading
-
-import yaml
 import typer
-
 from pathlib import Path
 
-from models import Config
+import factory
+
+from clock import Clock
+import threading
 
 
-def main(path: Path) -> None:
-    with path.open('r') as fp:
-        config_lst = yaml.safe_load(fp)
+def main(path: Path):
+    Clock.init(0.25)
 
+    macros = factory.build_macros(path)
+
+    # Set up threads
+    clock_thread = threading.Thread(target=Clock.instance().run)
     threads = []
-    for item in config_lst:
-        config: Config = Config.parse_obj(item)
-        thread = threading.Thread(target=config.execute_config)
-        threads.append(thread)
+    for macro in macros:
+        t = threading.Thread(target=macro.run)
+        threads.append(t)
 
-    for thread in threads:
-        thread.start()
-    for thread in threads:
-        thread.join()
+    # Start threads
+    clock_thread.start()
+    for t in threads:
+        t.start()
+
+    # Wait for threads to be done
+    for t in threads:
+        t.join()
+    Clock.instance().stop()
+    clock_thread.join()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     typer.run(main)

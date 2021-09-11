@@ -1,28 +1,43 @@
-import time
-
-
-class TimedEvent:
-    def on_tick(self) -> None:
-        raise NotImplementedError
+from time import sleep
+from threading import Condition
 
 
 class Clock:
-    _precision: float
-    _events: list[tuple[TimedEvent, int]]  # (event, tick-count before notifying)
-    _ticks: int
+    _latency: float
+    _lock: Condition
+    _instance: 'Clock' = None
+    _loop: bool
 
-    def __init__(self, precision: float):
-        self._precision = precision
-        self._events = []
-        self._ticks = 0
+    def __init__(self, latency: float):
+        self._latency = latency
+        self._lock = Condition()
 
-    def register(self, event: TimedEvent, delay: float) -> None:
-        tick_count = int(delay // self._precision)
-        self._events.append((event, tick_count))
+    @staticmethod
+    def init(latency: float):
+        assert Clock._instance is None, "Clock may not be initialized more than once"
+        Clock._instance = Clock(latency)
 
-    def _tick(self) -> None:
-        time.sleep(self._precision)
-        for event, tick_target in self._events:
-            if self._ticks % tick_target == 0:
-                event.on_tick()
-        self._ticks += 1
+    @staticmethod
+    def instance() -> 'Clock':
+        assert Clock._instance is not None, "Clock must be initialized"
+        return Clock._instance
+
+    @property
+    def lock(self) -> Condition:
+        return self._lock
+
+    def seconds_to_ticks(self, seconds: float) -> int:
+        return int(seconds / self._latency)
+
+    def run(self) -> None:
+        with self._lock:
+            self._lock.notify_all()
+
+        self._loop = True
+        while self._loop:
+            sleep(self._latency)
+            with self._lock:
+                self._lock.notify_all()
+
+    def stop(self) -> None:
+        self._loop = False
