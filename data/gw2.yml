@@ -11,7 +11,7 @@
 - name: Spam Elemental
   run_once:
     - type: delay
-      value: 3
+      value: 5
   loop:
     - type: key
       value: 0
